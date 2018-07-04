@@ -84,82 +84,97 @@ void		ft_reverse_video(int i)
 
 }
 
-void		ft_print_args(t_head_arg *head)
+void		ft_print_args(t_head_arg *head, int fd)
 {
-	int		fd;
 	t_arg	*tmp;
 
-	fd = open("/dev/tty", O_RDWR);
-	if (fd == -1)
-	{
-		ft_putendl_fd("OPEN problem", 2);
-		return ;
-	}
 	if (!head->start)
 		return ;
 	tmp = head->start;
 	while (tmp)
 	{
-		ft_underline(1);
+		if (tmp->pos)
+		{
+			write(fd, "posi>", 5);
+			ft_underline(1);
+		}
 		write(fd, tmp->info, ft_strlen(tmp->info));
-		ft_underline(0);
-		write(fd, "  ", 2);
+		if (tmp->pos)
+			ft_underline(0);
+		write(fd, " ", 2);
 		if (!tmp->next)
 			break ;
 		tmp = tmp->next;
 	}
-	close(fd);	
+}
+
+int			ft_prepare_term(t_head_arg *head)
+{
+	int		fd;
+	struct termios	term;
+	struct termios	term_backup;
+
+	fd = open("/dev/tty", O_RDWR);
+	if (fd == -1)
+		return (-1);
+	if (tcgetattr(fd, &term) == -1)
+		return (-1);
+	if (tcgetattr(fd, &term_backup) == -1)
+		return (-1);
+	term.c_lflag &= ~(ICANON);
+	term.c_lflag &= ~(ECHO);
+	tcsetattr(fd, TCSADRAIN, &term);
+	write(fd, tgetstr("ti", NULL), ft_strlen(tgetstr("ti", NULL)));
+	write(fd, tgetstr("vi", NULL), ft_strlen(tgetstr("vi", NULL)));
+	ft_print_args(head, fd);
+	tputs(tgoto(tgetstr("cm", NULL), 0, 0), 1, my_putchar);
+	ft_get_input(head, fd);
+	write(fd, tgetstr("te", NULL), ft_strlen(tgetstr("te", NULL)));
+	write(fd, tgetstr("ve", NULL), ft_strlen(tgetstr("ve", NULL)));
+	tcsetattr(fd, TCSADRAIN, &term_backup);
+	close(fd);
+	return (0);
 }
 
 int			main(int ac, char **av)
 {
 	t_head_arg		*head;
 	int				ret;
-	struct termios	term;
-	struct termios	term_backup;
 
 	head = initialise_head();
 	ft_get_args(head, ac, av);
+	if (!head->start)
+	{
+		ft_printf("Usage: ./ft_select [arg1] [arg2] [...]\n");
+		return (1);
+	}
 	
 	ret = init_term();
-	if (tcgetattr(0, &term) == -1)
+	if (ft_prepare_term(head))
+	{
+		ft_putendl_fd("Bordel dans l'initialisation du TERM", 2);
+		return (1);
+	}
+/*	if (tcgetattr(0, &term) == -1)
 		return (-1);
 	if (tcgetattr(0, &term_backup) == -1)
 		return (-1);
 	term.c_lflag &= ~(ICANON);
 	term.c_lflag &= ~(ECHO);
-	tcsetattr(0,0, &term);
-	int	fd = open("/dev/tty", O_RDWR);
+	tcsetattr(0,0, &term);*/
+/*	int	fd = open("/dev/tty", O_RDWR);
 	write(fd, tgetstr("ti", NULL), ft_strlen(tgetstr("ti", NULL)));
 	write(fd, tgetstr("vi", NULL), ft_strlen(tgetstr("vi", NULL)));
 	ft_print_args(head);
-	ft_dell_args(&head);
 	tputs(tgoto(tgetstr("cm", NULL), 0, 0), 1, my_putchar);
 	deplacer_cursor();
-	tcsetattr(0,0, &term_backup);
+//	tcsetattr(0,0, &term_backup);
 	write(fd, tgetstr("te", NULL), ft_strlen(tgetstr("te", NULL)));
 	write(fd, tgetstr("ve", NULL), ft_strlen(tgetstr("ve", NULL)));
-	close(fd);
+	close(fd);*/
+	ft_dell_args(&head);
 
 
-
-	/*		
-			if (!ret)
-			{
-			printf("colum > %d\nlines > %d\n", tgetnum("co"), tgetnum("li"));
-			printf("getflag > %d\n", tgetflag("os"));
-			tputs(tparm(af_cmd, COLOR_RED), 1, putchar);
-			printf("Texte en rouge\n");
-			tputs(blink_cmd, 1, putchar);
-			printf("texte clignotant\n");
-	//		print(tgetstr("AF", NULL));
-
-	//		printf("%s", af_cap);
-	//		printf("%s", tgetstr("cl", NULL));
-	}
-	else
-	printf("je n'ai pas reussi\n");
-	*/
 
 	return (ret);
 }

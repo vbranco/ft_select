@@ -7,6 +7,7 @@ t_head_arg	*initialise_head(void)
 	if (!(head = (t_head_arg*)malloc(sizeof(t_head_arg))))
 		return (NULL);
 	head->start = NULL;
+	head->end = NULL;
 	return (head);
 }
 
@@ -18,7 +19,9 @@ t_arg		*initialise_arg(char *inf)
 		return (NULL);
 	arg->info = ft_strdup(inf);
 	arg->next = NULL;
-	arg->flag = 0;
+	arg->prev = NULL;
+	arg->flag = '\0';
+	arg->pos = 0;
 	return (arg);
 }
 
@@ -30,7 +33,10 @@ void		add_arg(t_head_arg *head, char *info)
 	add = initialise_arg(info);
 	tmp = head->start;
 	if (!tmp)
+	{
 		head->start = add;
+		head->end = add;
+	}
 	else
 	{
 		while (tmp)
@@ -40,6 +46,8 @@ void		add_arg(t_head_arg *head, char *info)
 			tmp = tmp->next;
 		}
 		tmp->next = add;
+		add->prev = tmp;
+		head->end = add;
 	}
 }
 

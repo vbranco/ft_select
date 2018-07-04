@@ -1,126 +1,84 @@
 #include "ft_select.h"
 
-void	current_position(int *x, int *y)
+/*void		ft_dell_arg(t_head_arg *head);
 {
-	char	buf[8];
-	char	cmd[] = "\033[6n";
-	int		i;
-	int		a;
-	char	*tmp;
+}*/
 
-	if (isatty(fileno(stdin)))
+void		ft_deplace(t_head_arg *head, char dire)
+{
+	t_arg	*tmp;
+	
+	tmp = head->start;
+	while (tmp && !tmp->pos)
 	{
-		write(1, cmd, sizeof(cmd));
-		read(0, buf, sizeof(buf));
+		if (!tmp->next)
+		{
+			tmp = NULL;
+			break ;
+		}
+		tmp = tmp->next;
 	}
-	i = 2;
-	while (buf[i] && buf[i] != ';')
-		i++;
-	tmp = ft_strsub(buf, 2, i - 2);
-	*y = ft_atoi(tmp);
-	free(tmp);
-	i++;
-	a = i;
-	while (buf[i] && buf[i] != 'R')
-		i++;
-	tmp = ft_strsub(buf, a, i - a);
-	*x = ft_atoi(tmp);
-	free(tmp);
+	if (tmp)
+	{
+		tmp->pos = 0;
+		if (dire == 'r')
+		{
+			if (!tmp->next)//fin de la liste
+			{
+				tmp = head->start;
+				tmp->pos = 1;
+			}
+			else
+				tmp->next->pos = 1;
+		}
+		if (dire == 'l')
+		{
+			if (!tmp->prev)
+			{
+				tmp = head->end;
+				tmp->pos = 1;
+			}
+			else
+				tmp->prev->pos = 1;
+		}
+	}
 }
 
-int			go_horizontal(char *res, int x, int y, char c)
+void		ft_deplace_cursor(t_head_arg *head, char *buf, int fd)
 {
-	if (c == '-')
-	{
-		if (x > 0)
-			x--;
-	}
-	else if (c == '+')
-	{
-		if (x < tgetnum("co"))
-			x++;
-	}
-	tputs(tgoto(res, x, y), 1, my_putchar);
-	return (x);
+//	write(fd, "ici\n", 4);
+	printf("ici\n");
+	if (buf[2] == 67)
+		ft_deplace(head, 'r');
+	if (buf[2] == 68)
+		ft_deplace(head, 'l');
+	tputs(tgoto(tgetstr("cm", NULL), 0, 0), 1, my_putchar);
+	ft_print_args(head, fd);
 }
 
-int			go_vertical(char *res, int x, int y, char c)
+void		ft_get_input(t_head_arg *head, int fd)
 {
-	if (c == '-')
+	char	buf[4];
+
+	while (101)
 	{
-		if (y > 0)
-			y--;
-	}
-	else if (c == '+')
-	{
-		if (y < tgetnum("li"))
-			y++;
-	}
-	tputs(tgoto(res, x, y), 1, my_putchar);
-	return (y);
-}
-
-void		modifier_emplacement_curseur(char *buf, char *res, int *x, int *y)
-{
-	int		a;
-	int		b;
-
-	a = *x;
-	b = *y;
-	if (buf[1] == 91)
-	{
-		if (buf[2] == 65)//aller en haut
-			b = go_vertical(res, a, b, '-');
-		else if (buf[2] == 66)//aller en bas
-			b = go_vertical(res, a, b, '+');
-		else if (buf[2] == 67)//aller a droite
-			a = go_horizontal(res, a, b, '+');
-		else if (buf[2] == 68)//aller a gauche
-			a = go_horizontal(res, a, b, '-');
-	}
-	*x = a;
-	*y = b;
-}
-
-void		reset_cursor(char *res, int *x, int *y)
-{
-	int		a;
-	int		b;
-
-	current_position(&a, &b);
-	a--;
-	b--;
-	*x = a;
-	*y = b;
-	tputs(tgoto(res, *x, *y), 1, my_putchar);
-}
-
-int			deplacer_cursor(void)
-{
-	char	buf[3];
-	char	*area;
-	char	*res = tgetstr("cm", NULL);
-	int		x;
-	int		y;
-
-	reset_cursor(res, &x, &y);
-	while (1)
-	{
-		read(0, buf, 3);
+		read(0, buf, 4);
 		if (buf[0] == 4)
+			return ;
+		printf("buf > |%i| |%i| |%i| |%i|\n", buf[0], buf[1], buf[2], buf[3]);
+		if (buf[0] == 27 && buf[1] == 91)//deplacer
+			ft_deplace_cursor(head, buf, fd);
+/*		if (buf[0] == 127 || (buf[0] == 27 && buf[1] == 91 && buf[2] == 51 && buf[3] == 126 ))//delete ou backspace
+			ft_dell_arg(head);
+		if (buf[0] == 32)//espace
+			ft_select_arg(head);
+		if (buf[0] == 10)//return
 		{
-			printf("Ctrls+D, on quitte\n");
-			return (0);
+			ft_print_args(head, 1);
+			break ;
 		}
-		if (buf[0] == 27)
-			modifier_emplacement_curseur(buf, res, &x, &y);
-		else
-		{
-			write(1, &buf[0], 1);
-			reset_cursor(res, &x, &y);
-		}
-		ft_bzero(buf, 3);
+		if (buf[0] == 27 && buf[1] == 0)//echap
+			stop_program*/
+		ft_bzero(buf, 4);
 	}
-	return (0);
 }
-
