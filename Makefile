@@ -15,7 +15,7 @@ NAME		=	ft_select
 
 HEADER		=	ft_select.h
 
-FILENAMES	=	main.c ft_move.c ft_tools_lst.c \
+FILENAMES	=	main.c ft_move.c ft_tools_lst.c ft_get_input.c \
 
 SOURCES		=	$(addprefix ./, $(FILENAMES))
 

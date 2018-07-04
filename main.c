@@ -94,23 +94,24 @@ void		ft_print_args(t_head_arg *head, int fd)
 	while (tmp)
 	{
 		if (tmp->pos)
-		{
-			write(fd, "posi>", 5);
 			ft_underline(1);
-		}
+		if (tmp->flag)
+			ft_reverse_video(1);
 		write(fd, tmp->info, ft_strlen(tmp->info));
+		if (tmp->flag)
+			ft_reverse_video(0);
 		if (tmp->pos)
 			ft_underline(0);
-		write(fd, " ", 2);
 		if (!tmp->next)
 			break ;
+		write(fd, " ", 2);
 		tmp = tmp->next;
 	}
 }
 
-int			ft_prepare_term(t_head_arg *head)
+int					ft_prepare_term(t_head_arg *head)
 {
-	int		fd;
+	int				fd;
 	struct termios	term;
 	struct termios	term_backup;
 
@@ -141,14 +142,13 @@ int			main(int ac, char **av)
 	t_head_arg		*head;
 	int				ret;
 
-	head = initialise_head();
-	ft_get_args(head, ac, av);
-	if (!head->start)
+	if (ac == 1)
 	{
 		ft_printf("Usage: ./ft_select [arg1] [arg2] [...]\n");
 		return (1);
 	}
-	
+	head = initialise_head();
+	ft_get_args(head, ac, av);
 	ret = init_term();
 	if (ft_prepare_term(head))
 	{

@@ -20,7 +20,7 @@ t_arg		*initialise_arg(char *inf)
 	arg->info = ft_strdup(inf);
 	arg->next = NULL;
 	arg->prev = NULL;
-	arg->flag = '\0';
+	arg->flag = 0;
 	arg->pos = 0;
 	return (arg);
 }
