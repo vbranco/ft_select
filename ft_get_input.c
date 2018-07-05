@@ -15,22 +15,6 @@ void		ft_select_arg(t_head_arg *head, int fd)
 	ft_print_args(head, fd);
 }
 
-int			ft_no_position(t_head_arg *head)
-{
-	t_arg	*tmp;
-
-	tmp = head->start;
-	while (tmp)
-	{
-		if (tmp->pos)
-			return (0);
-		if (!tmp->next)
-			return (1);
-		tmp = tmp->next;
-	}
-	return (0);
-}
-
 t_arg		*ft_looking_for_position(t_head_arg *head)
 {
 	t_arg	*tmp;
@@ -46,6 +30,22 @@ t_arg		*ft_looking_for_position(t_head_arg *head)
 		tmp = tmp->next;
 	}
 	return (tmp);
+}
+
+void		ft_print_out(t_head_arg *head)
+{
+	t_arg	*tmp;
+
+	tmp = head->start;
+	while (tmp)
+	{
+		if (tmp->flag)
+			write(1, tmp->info, ft_strlen(tmp->info));
+		if (!tmp->next)
+			break ;
+		write(1, " ", 1);
+		tmp = tmp->next;
+	}
 }
 
 void		ft_get_input(t_head_arg *head, int fd)
@@ -69,7 +69,7 @@ void		ft_get_input(t_head_arg *head, int fd)
 			ft_select_arg(head, fd);
 		if (buf[0] == 10)//return
 		{
-			ft_print_args(head, fd);
+			ft_print_out(head);
 			break ;
 		}
 		if (buf[0] == 27 && buf[1] == 0)//echap

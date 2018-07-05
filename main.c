@@ -31,28 +31,8 @@ int		my_putchar(int c)
 	char ca;
 
 	ca = (char)c;
-	write(1, &ca, 1);
+	write(0, &ca, 1);
 	return (1);
-}
-
-void		print(char *s)
-{
-	int		i = 0;
-
-	while (s[i])
-	{
-		if (s[i] == '\x1b')
-			printf("ESC");
-		else
-			putchar(s[i]);
-		i++;
-	}
-	putchar('\n');
-}
-
-void	gotoxy(int x, int y)
-{
-	printf("%c[%d;%df", 0x1B, y, x);
 }
 
 void		ft_get_args(t_head_arg *head, int ac, char **av)
@@ -104,7 +84,7 @@ void		ft_print_args(t_head_arg *head, int fd)
 			ft_underline(0);
 		if (!tmp->next)
 			break ;
-		write(fd, " ", 2);
+		write(fd, " ", 1);
 		tmp = tmp->next;
 	}
 }
@@ -125,13 +105,13 @@ int					ft_prepare_term(t_head_arg *head)
 	term.c_lflag &= ~(ICANON);
 	term.c_lflag &= ~(ECHO);
 	tcsetattr(fd, TCSADRAIN, &term);
-	write(fd, tgetstr("ti", NULL), ft_strlen(tgetstr("ti", NULL)));
-	write(fd, tgetstr("vi", NULL), ft_strlen(tgetstr("vi", NULL)));
+	tputs(tgetstr("ti", NULL), 1, my_putchar);
+	tputs(tgetstr("vi", NULL), 1, my_putchar);
 	ft_print_args(head, fd);
 	tputs(tgoto(tgetstr("cm", NULL), 0, 0), 1, my_putchar);
 	ft_get_input(head, fd);
-	write(fd, tgetstr("te", NULL), ft_strlen(tgetstr("te", NULL)));
-	write(fd, tgetstr("ve", NULL), ft_strlen(tgetstr("ve", NULL)));
+	tputs(tgetstr("te", NULL), 1, my_putchar);
+	tputs(tgetstr("ve", NULL), 1, my_putchar);
 	tcsetattr(fd, TCSADRAIN, &term_backup);
 	close(fd);
 	return (0);
@@ -140,6 +120,7 @@ int					ft_prepare_term(t_head_arg *head)
 int			main(int ac, char **av)
 {
 	t_head_arg		*head;
+	t_arg			*tmp;
 	int				ret;
 
 	if (ac == 1)
@@ -149,6 +130,8 @@ int			main(int ac, char **av)
 	}
 	head = initialise_head();
 	ft_get_args(head, ac, av);
+	tmp = head->start;
+	tmp->pos = 1;
 	ret = init_term();
 	if (ft_prepare_term(head))
 	{

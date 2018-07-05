@@ -4,18 +4,6 @@ void		ft_deplace(t_head_arg *head, char dire)
 {
 	t_arg	*tmp;
 	
-	tmp = head->start;
-	if (ft_no_position(head))
-	{
-		if (dire == 'r')
-			tmp->pos = 1;
-		else if (dire == 'l')
-		{
-			tmp = head->end;
-			tmp->pos = 1;
-		}
-		return ;
-	}
 	tmp = ft_looking_for_position(head);
 	if (tmp)
 	{
