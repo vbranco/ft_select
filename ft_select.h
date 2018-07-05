@@ -42,9 +42,8 @@ void				remove_arg(t_head_arg *head, char *inf);
 void				ft_dell_args(t_head_arg **head);
 
 /*
-**	FT_MOVE.c
+**	FT_MOVE_AND_DELL.c
 */
-void				ft_get_input(t_head_arg *head, int fd);
 void				ft_deplace_cursor(t_head_arg *head, char *buf, int fd);
 void				ft_deplace(t_head_arg *head, char dire);
 int					ft_dell_arg(t_head_arg *head, int fd);
@@ -52,16 +51,26 @@ int					ft_dell_arg(t_head_arg *head, int fd);
 /*
 **	MAIN.c
 */
-int					my_putchar(int c);
-void				ft_print_args(t_head_arg *head, int fd);
+int					ft_prepare_term(t_head_arg *head);
+void				ft_get_args(t_head_arg *head, int ac, char **av);
+int					ft_init_term(void);
+
 
 /*
 **	FT_GET_INPUT.c
 */
-void				ft_get_input(t_head_arg *head, int fd);
 void				ft_select_arg(t_head_arg *head, int fd);
-int					ft_no_position(t_head_arg *head);
 t_arg				*ft_looking_for_position(t_head_arg *head);
+void				ft_get_input(t_head_arg *head, int fd);
+
+/*
+**	FT_PRINTING.c
+*/
+void				ft_print_args(t_head_arg *head, int fd);
+int					my_putchar(int c);
+void				ft_print_out(t_head_arg *head);
+
+
 
 
 #endif
