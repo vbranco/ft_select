@@ -1,29 +1,6 @@
 #include "ft_select.h"
 
-int			ft_init_term(void)
-{
-	int		ret;
-	char	*term_type;
-
-	term_type = getenv("TERM");
-	if (!term_type)
-	{
-		ft_putendl_fd("TERM environment variable not set.", 2);
-		return (-1);
-	}
-	ret = tgetent(NULL, term_type);
-	if (ret == -1)
-	{
-		ft_putendl_fd("Could not access to termcap database\n", 2);
-		return (-1);
-	}
-	else if (ret == 0)
-	{
-		ft_putendl_fd("Terminal type is not defined", 2);
-		return (-1);
-	}
-	return (0);
-}
+t_head_arg	*head;
 
 void		ft_get_args(t_head_arg *head, int ac, char **av)
 {
@@ -37,52 +14,85 @@ void		ft_get_args(t_head_arg *head, int ac, char **av)
 	}
 }
 
-int					ft_prepare_term(t_head_arg *head)
+void		ft_display_size(int sig)
 {
-	int				fd;
-	struct termios	term;
-	struct termios	term_backup;
+	struct winsize	wind;
 
-	fd = open("/dev/tty", O_RDWR);
-	if (fd == -1)
-		return (-1);
-	if (tcgetattr(fd, &term) == -1)
-		return (-1);
-	if (tcgetattr(fd, &term_backup) == -1)
-		return (-1);
-	term.c_lflag &= ~(ICANON);
-	term.c_lflag &= ~(ECHO);
-	tcsetattr(fd, TCSADRAIN, &term);
-	tputs(tgetstr("ti", NULL), 1, my_putchar);
-	tputs(tgetstr("vi", NULL), 1, my_putchar);
-	ft_print_args(head, fd);
+	(void)sig;
+	ioctl(0, TIOCGWINSZ, &wind);
+	head->li = wind.ws_row;
+	head->co = wind.ws_col;
+	write(head->fd, tgetstr("cl", NULL), ft_strlen(tgetstr("cl", NULL)));
 	tputs(tgoto(tgetstr("cm", NULL), 0, 0), 1, my_putchar);
-	ft_get_input(head, fd);
-	tputs(tgetstr("te", NULL), 1, my_putchar);
-	tputs(tgetstr("ve", NULL), 1, my_putchar);
-	tcsetattr(fd, TCSADRAIN, &term_backup);
-	close(fd);
-	return (0);
+	ft_print_args(head);
+}
+
+void		ft_frontground(int sig)//problem quand fait 2x
+{
+	if (ft_prepare_term(head, 0))
+	{
+		ft_putendl_fd("Cannot initialise TERM", 2);
+		ft_dell_args(&head);
+		return ;
+	}
+}
+
+void		ft_background(int sig)//problem quand fait 2x
+{
+	ft_config_term(head, 0);
+//	close(head->fd);
+	if (sig == SIGTSTP)
+	{
+		signal(SIGTSTP, SIG_DFL);
+		ioctl(0, TIOCSTI, "\x1A");
+	}
+}
+
+void		ft_stop(int sig)
+{
+	ft_background(sig);
+	ft_dell_args(&head);
+	exit(EXIT_SUCCESS);
+}
+
+void		ft_verif_signal(void)
+{
+	signal(SIGWINCH, ft_display_size);
+	signal(SIGCONT, ft_frontground);
+	signal(SIGTSTP, ft_background);
+	signal(SIGINT, ft_stop);
+	signal(SIGHUP, ft_stop);
+	signal(SIGTERM, ft_stop);
+	signal(SIGSEGV, ft_stop);
+	signal(SIGQUIT, ft_stop);
+	signal(SIGFPE, ft_stop);
+	signal(SIGALRM, ft_stop);
+	signal(SIGKILL, ft_stop);
+	signal(SIGABRT, ft_stop);
+	signal(SIGUSR1, ft_stop);
+	signal(SIGUSR2, ft_stop);
 }
 
 int			main(int ac, char **av)
 {
-	t_head_arg		*head;
 	t_arg			*tmp;
 
 	if (ac == 1)
 		return (ft_printf("Usage: ./ft_select [arg1] [arg2] [...]\n"));
 	if (ft_init_term())
 		return (-1);
+	ft_verif_signal();
 	head = initialise_head();
 	ft_get_args(head, ac, av);
 	tmp = head->start;
 	tmp->pos = 1;
-	if (ft_prepare_term(head))
+	if (ft_prepare_term(head, 1))
 	{
 		ft_putendl_fd("Cannot initialise TERM", 2);
-		return (1);
+		ft_dell_args(&head);
+		return (-1);
 	}
 	ft_dell_args(&head);
+//	close(head->fd);
 	return (0);
 }

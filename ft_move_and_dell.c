@@ -26,14 +26,13 @@ void		ft_deplace(t_head_arg *head, char dire)
 	}
 }
 
-void		ft_deplace_cursor(t_head_arg *head, char *buf, int fd)
+void		ft_deplace_cursor(t_head_arg *head, char *buf)
 {
-	if (buf[2] == 67)
+	if (buf[2] == 67 || buf[2] == 66)
 		ft_deplace(head, 'r');
-	if (buf[2] == 68)
+	if (buf[2] == 68 || buf[2] == 65)
 		ft_deplace(head, 'l');
-	tputs(tgoto(tgetstr("cm", NULL), 0, 0), 1, my_putchar);
-	ft_print_args(head, fd);
+	ft_display_size(0);
 }
 
 /*
@@ -80,7 +79,7 @@ static void		ft_dell_arg_2(t_head_arg *head)
 
 }
 
-int			ft_dell_arg(t_head_arg *head, int fd)
+int			ft_dell_arg(t_head_arg *head)
 {
 	t_arg	*del;
 	t_arg	*tmp;
@@ -98,8 +97,6 @@ int			ft_dell_arg(t_head_arg *head, int fd)
 	}
 	else
 		ft_dell_arg_2(head);
-	write(fd, tgetstr("cl", NULL), ft_strlen(tgetstr("cl", NULL)));
-	tputs(tgoto(tgetstr("cm", NULL), 0, 0), 1, my_putchar);
-	ft_print_args(head, fd);
+	ft_display_size(0);
 	return (0);
 }

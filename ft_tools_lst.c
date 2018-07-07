@@ -8,6 +8,11 @@ t_head_arg	*initialise_head(void)
 		return (NULL);
 	head->start = NULL;
 	head->end = NULL;
+	head->fd = 0;
+	head->li = 0;
+	head->co = 0;
+	head->nb_lines = 0;
+	head->nb_col = 0;
 	return (head);
 }
 
