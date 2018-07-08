@@ -57,6 +57,8 @@ int			ft_calculate_size(t_head_arg *head)
 		len_args = (head->nb_col * nb_max_col) + (nb_max_col - 1);
 	}
 	head->nb_lines = line;
+	if (head->nb_lines > head->li)
+		return (write(head->fd, "Screen size too small", 21));
 	return (0);
 }
 
