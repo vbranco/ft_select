@@ -25,70 +25,26 @@ static void		ft_reverse_video(int i)
 		tputs(tgetstr("me", NULL), 1, my_putchar);
 }
 
-static void		ft_calculate_size(t_head_arg *head)
-{
-	t_arg	*tmp;
-	int		len_args;
-	int		line;
-
-	len_args = 0;
-	line = 1;
-	tmp = head->start;
-	while (tmp)
-	{
-		len_args += (int)ft_strlen(tmp->info);
-		if ((int)ft_strlen(tmp->info) > head->nb_col)
-			head->nb_col = (int)ft_strlen(tmp->info);
-		if (!tmp->next)
-			break;
-		len_args += 1; 
-		tmp = tmp->next;
-	}
-	while (len_args > head->co)
-	{
-		len_args /= 2;
-		line++;
-	}
-	head->nb_lines = line;
-//	printf("head->co %i || size total %i || lines %i || max colone %i\n", head->co, len_args, head->nb_lines, head->nb_col);
-}
-
-static void	ft_place_for_printf(t_head_arg *head, int *x, int *y)
-{
-//	while (head->nb_lines > 0)
-//	{
-//		(*y)++;
-		tputs(tgoto(tgetstr("cm", NULL), *x, *y), 1, my_putchar);
-//		head->nb_lines--;
-//	}
-}
-
 void		ft_print_args(t_head_arg *head)
 {
 	t_arg	*tmp;
-	int		x;//nb colones
-	int		y;//nb lines
+	int		x;
+	int		y;
 
 	x = 0;
 	y = 0;
 	if (!head->start)
 		return ;
-	ft_calculate_size(head);
+	if (ft_calculate_size(head))
+		return ;
 	tmp = head->start;
 	while (tmp)
 	{
 		(tmp->pos) ? ft_underline(1) : 0;
 		(tmp->flag) ? ft_reverse_video(1) : 0;
-//		ft_place_for_printf(head, &x, &y);
 		tputs(tgoto(tgetstr("cm", NULL), x, y), 1, my_putchar);
 		write(head->fd, tmp->info, ft_strlen(tmp->info));
-//		x++;
-		y++;
-		if (y == head->nb_lines)
-		{
-			y = 0;
-			x += head->nb_col + 1;
-		}
+		ft_calculate_place_print(head, &x, &y);
 		(tmp->pos) ? ft_underline(0) : 0;
 		(tmp->flag) ? ft_reverse_video(0) : 0;
 		if (!tmp->next)

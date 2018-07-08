@@ -77,6 +77,12 @@ int					my_putchar(int c);
 void				ft_print_out(t_head_arg *head);
 
 /*
+**	FT_CALCULATE_FOR_PRINT.c
+*/
+int			ft_calculate_size(t_head_arg *head);
+void		ft_calculate_place_print(t_head_arg *head, int *x, int *y);
+
+/*
 ** FT_TERM.c
 */
 int					ft_prepare_term(t_head_arg *head, int i);
