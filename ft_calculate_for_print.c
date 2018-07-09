@@ -1,8 +1,8 @@
 #include "ft_select.h"
 
-static void		ft_calculate_col_max(t_head_arg *head)
+static void	ft_calculate_col_max(t_head_arg *head)
 {
-	t_arg		*tmp;
+	t_arg	*tmp;
 
 	tmp = head->start;
 	while (tmp)
@@ -15,10 +15,10 @@ static void		ft_calculate_col_max(t_head_arg *head)
 	}
 }
 
-static int		ft_calculate_total_len(t_head_arg *head)
+static int	ft_calculate_total_len(t_head_arg *head)
 {
-	t_arg		*tmp;
-	int			total_len;
+	t_arg	*tmp;
+	int		total_len;
 
 	total_len = 0;
 	tmp = head->start;
@@ -71,3 +71,17 @@ void		ft_calculate_place_print(t_head_arg *head, int *x, int *y)
 		(*x) += head->nb_col + 1;
 	}
 }
+
+void		ft_display_size(int sig)
+{
+	struct winsize	wind;
+
+	(void)sig;
+	ioctl(0, TIOCGWINSZ, &wind);
+	head->li = wind.ws_row;
+	head->co = wind.ws_col;
+	write(head->fd, tgetstr("cl", NULL), ft_strlen(tgetstr("cl", NULL)));
+	tputs(tgoto(tgetstr("cm", NULL), 0, 0), 1, my_putchar);
+	ft_print_args(head);
+}
+

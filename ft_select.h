@@ -31,12 +31,11 @@ typedef struct		s_arg
 	char			*info;
 	short int		flag;
 	short int		pos;
-/*
-**	flag: s = selection
-*/
 	struct s_arg	*next;
 	struct s_arg	*prev;
 }					t_arg;
+
+t_head_arg			*head;
 
 /*
 **	FT_TOOLS_LST.c
@@ -57,9 +56,9 @@ int					ft_dell_arg(t_head_arg *head);
 /*
 **	MAIN.c
 */
-void				ft_get_args(t_head_arg *head, int ac, char **av);
-void				ft_verif_signal(void);
 void				ft_display_size(int sig);
+void				ft_verif_signal_1(void);
+void				ft_verif_signal_2(void);
 
 
 /*
@@ -68,6 +67,7 @@ void				ft_display_size(int sig);
 void				ft_select_arg(t_head_arg *head);
 t_arg				*ft_looking_for_position(t_head_arg *head);
 void				ft_get_input(t_head_arg *head);
+void				ft_get_args(t_head_arg *head, int ac, char **av);
 
 /*
 **	FT_PRINTING.c
@@ -79,8 +79,9 @@ void				ft_print_out(t_head_arg *head);
 /*
 **	FT_CALCULATE_FOR_PRINT.c
 */
-int			ft_calculate_size(t_head_arg *head);
-void		ft_calculate_place_print(t_head_arg *head, int *x, int *y);
+int					ft_calculate_size(t_head_arg *head);
+void				ft_calculate_place_print(t_head_arg *head, int *x, int *y);
+void				ft_display_size(int sig);
 
 /*
 ** FT_TERM.c
@@ -88,6 +89,16 @@ void		ft_calculate_place_print(t_head_arg *head, int *x, int *y);
 int					ft_prepare_term(t_head_arg *head, int i);
 void				ft_config_term(t_head_arg *head, int start);
 int					ft_init_term(void);
+
+/*
+** FT_SIGNAL.c
+*/
+void				ft_verif_signal_1(void);
+void				ft_verif_signal_2(void);
+void				ft_stop(int sig);
+void				ft_frontground(int sig);
+void				ft_background(int sig);
+
 
 
 

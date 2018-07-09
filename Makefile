@@ -17,6 +17,7 @@ HEADER		=	ft_select.h
 
 FILENAMES	=	main.c ft_move_and_dell.c ft_tools_lst.c ft_get_input.c ft_printing.c ft_term.c \
 ft_calculate_for_print.c \
+ft_signal.c
 
 
 SOURCES		=	$(addprefix ./, $(FILENAMES))

@@ -59,3 +59,15 @@ void		ft_get_input(t_head_arg *head)
 		ft_bzero(buf, 4);
 	}
 }
+
+void		ft_get_args(t_head_arg *head, int ac, char **av)
+{
+	int		i;
+
+	i = 1;
+	while (i < ac)
+	{
+		add_arg(head, av[i]);
+		i++;
+	}
+}
