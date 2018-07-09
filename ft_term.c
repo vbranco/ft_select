@@ -11,7 +11,6 @@ int					ft_prepare_term(t_head_arg *head, int i)
 		if (tcgetattr(head->fd, &(head->term)) == -1)
 			return (-1);
 	}
-//	ft_verif_signal();
 	ft_config_term(head, 1);
 	ft_display_size(0);
 	ft_get_input(head);
