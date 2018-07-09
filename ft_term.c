@@ -4,13 +4,14 @@ int					ft_prepare_term(t_head_arg *head, int i)
 {
 	if (i)
 	{
-		head->fd = open("/dev/tty", O_RDWR);
-		if (head->fd == -1)
+		if (!isatty(0))
 			return (-1);
-		if (tcgetattr(0, &(head->term)) == -1)
+		if ((head->fd = open(ttyname(0), O_RDWR)) == -1)
+			return (-1);
+		if (tcgetattr(head->fd, &(head->term)) == -1)
 			return (-1);
 	}
-	ft_verif_signal();
+//	ft_verif_signal();
 	ft_config_term(head, 1);
 	ft_display_size(0);
 	ft_get_input(head);
@@ -25,14 +26,16 @@ void				ft_config_term(t_head_arg *head, int start)
 	{
 		head->term.c_lflag &= ~(ICANON);
 		head->term.c_lflag &= ~(ECHO);
-		tcsetattr(0, TCSADRAIN, &(head->term));
+		head->term.c_cc[VMIN] = 1;
+		head->term.c_cc[VTIME] = 0;
+		tcsetattr(head->fd, TCSANOW, &(head->term));
 		tputs(tgetstr("ti", NULL), 1, my_putchar);
 		tputs(tgetstr("vi", NULL), 1, my_putchar);
 	}
 	else
 	{
 		head->term.c_lflag |= (ICANON | ECHO);
-		tcsetattr(0, 0, &(head->term));
+		tcsetattr(head->fd, 0, &(head->term));
 		tputs(tgetstr("te", NULL), 1, my_putchar);
 		tputs(tgetstr("ve", NULL), 1, my_putchar);
 	}

@@ -27,20 +27,9 @@ void		ft_display_size(int sig)
 	ft_print_args(head);
 }
 
-void		ft_frontground(int sig)//problem quand fait 2x
-{
-	if (ft_prepare_term(head, 0))
-	{
-		ft_putendl_fd("Cannot initialise TERM", 2);
-		ft_dell_args(&head);
-		return ;
-	}
-}
-
 void		ft_background(int sig)//problem quand fait 2x
 {
 	ft_config_term(head, 0);
-//	close(head->fd);
 	if (sig == SIGTSTP)
 	{
 		signal(SIGTSTP, SIG_DFL);
@@ -48,9 +37,17 @@ void		ft_background(int sig)//problem quand fait 2x
 	}
 }
 
+void		ft_frontground(int sig)//problem quand fait 2x
+{
+	ft_verif_signal();
+	ft_config_term(head, 1);
+	ft_display_size(0);
+}
+
 void		ft_stop(int sig)
 {
 	ft_background(sig);
+	close(head->fd);
 	ft_dell_args(&head);
 	exit(EXIT_SUCCESS);
 }
@@ -93,6 +90,5 @@ int			main(int ac, char **av)
 		return (-1);
 	}
 	ft_dell_args(&head);
-//	close(head->fd);
 	return (0);
 }
