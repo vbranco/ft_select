@@ -44,28 +44,27 @@ CFLAGS 	= -Wall -Wextra -Werror
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	@$(MAKE) -C $(PF)
-	@ar -rc $@ $^ $(PFOBJ)
-	@ranlib $(NAME)
+		@$(MAKE) -C $(PF)
+		@ar -rc $@ $^ $(PFOBJ)
+		@ranlib $(NAME)
 
 build:
-	@mkdir build/
-	@echo "\033[32m Making libft"
+		@mkdir build/
+		@echo "\033[32m Making libft"
 
 build/%.o: ./%.c | build
-	@gcc $(CFLAGS) -I $(HEADER) -c $< -o $@
+		@gcc $(CFLAGS) -I $(HEADER) -c $< -o $@
 
 clean:
-	@$(MAKE) -C $(PF) clean
-	@/bin/rm -rf build/
-	@echo "\033[31m Cleanning libft"
+		@echo "\033[31m Cleanning libft"
+		@$(MAKE) -C $(PF) clean
+		@/bin/rm -rf build/
 
-fclean: clean
-	@echo "\033[31m FCleanning libft"
-	@$(MAKE) -C $(PF) fclean
-	@/bin/rm -rf $(NAME)
+fclean:
+		@$(MAKE) -C $(PF) fclean
+		@/bin/rm -rf $(NAME)
 
 re:
-	@echo "\033[32m RE libft"
-	@$(MAKE) fclean
-	@$(MAKE) all
+		@echo "\033[32m RE libft"
+		@$(MAKE) fclean
+		@$(MAKE) all

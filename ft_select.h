@@ -98,8 +98,4 @@ void				ft_verif_signal_2(void);
 void				ft_stop(int sig);
 void				ft_frontground(int sig);
 void				ft_background(int sig);
-
-
-
-
 #endif
