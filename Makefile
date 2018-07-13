@@ -34,21 +34,10 @@ LIB_INC		=	-I $(L_FT)/libft.h
 
 LAGS		=	-Wall -Wextra -Werror
 
-.PHONY: all clean fclean re build 
+.PHONY: all clean fclean re
 
 all: $(NAME)
 
-$(NAME): $(OBJECTS)
-		@$(MAKE) -C $(L_FT)
-		@gcc $(FLAGS) -I  $(HEADER) $(SOURCES) $(LIB) -lncurses -o $@
-		@echo " Ready to play"
-
-build:
-	    @echo "\033[32m Making ft_select"
-		@mkdir build/
-
-build/%.o: ./%.c | build
-	    @gcc $(FLAGS) $(LIB_INC) -I $(HEADER) -c $< -o $@
 
 clean:
 		@echo "\033[31m Cleanning ft_select"
@@ -64,4 +53,15 @@ re:
 		@$(MAKE) fclean
 		@$(MAKE) all
 
+build:
+	    @echo "\033[32m Making ft_select"
+		@mkdir build/
+
+$(NAME): $(OBJECTS)
+		@$(MAKE) -C $(L_FT)
+		@gcc $(FLAGS) -I  $(HEADER) $(SOURCES) $(LIB) -lncurses -o $@
+		@echo " Ready to play"
+
+build/%.o: ./%.c | build
+	    @gcc $(FLAGS) $(LIB_INC) -I $(HEADER) -c $< -o $@
 

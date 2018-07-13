@@ -48,8 +48,7 @@ char			**ft_split(char *str)
 		start = i;
 		while (str[i] && str[i] != ' ' && str[i] != '\t' && str[i] != '\n')
 			i++;
-		if (w < nb_words)
-			s[w++] = ft_strsub(str, start, i - start);
+		(w < nb_words) ? s[w++] = ft_strsub(str, start, i - start) : 0;
 	}
 	s[w] = NULL;
 	return (s);

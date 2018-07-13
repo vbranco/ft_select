@@ -39,7 +39,7 @@ PFOBJ 	= ft_printf/build/*
 
 CFLAGS 	= -Wall -Wextra -Werror
 
-.PHONY: all clean fclean re build message
+.PHONY: all clean fclean re
 
 all: $(NAME)
 
