@@ -20,6 +20,7 @@ int			main(int ac, char **av)
 		ft_dell_args(&head);
 		return (-1);
 	}
+//	ft_print_out(head);a ajouter pour voir l'affichage mais a verifier le bonus n 2
 	ft_dell_args(&head);
 	return (0);
 }

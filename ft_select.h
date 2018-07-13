@@ -9,9 +9,19 @@
 #include <sys/ioctl.h>
 #include <signal.h>
 
-
-#include <stdlib.h>
-#include <stdio.h>
+# define TBLACK		"\e[30m"
+# define TBLUE		"\e[34m"
+# define TCYAN		"\e[1m\e[96m"
+# define TRED		"\e[31m"
+# define TMAGENTA	"\e[35m"
+# define TGREEN		"\e[32m"
+# define TYELLOW	"\e[33m"
+# define BBLACK		"\e[40m"
+# define BCYAN		"\e[46m"
+# define BYELLOW	"\e[43m"
+# define BRED		"\e[41m"
+# define BGREEN		"\e[42m"
+# define TSTOP		"\e[0m"
 
 
 typedef struct		s_head_arg

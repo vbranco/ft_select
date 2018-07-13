@@ -68,4 +68,3 @@ void		ft_print_out(t_head_arg *head)
 		tmp = tmp->next;
 	}
 }
-
