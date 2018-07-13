@@ -51,7 +51,7 @@ void		ft_get_input(t_head_arg *head)
 		(buf[0] == 32) ? ft_select_arg(head) : 0;
 		if (buf[0] == 10)//return
 		{
-			ft_print_out(head);
+			head->print = 1;
 			break ;
 		}
 		if (buf[0] == 27 && buf[1] == 0)//echap

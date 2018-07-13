@@ -13,6 +13,7 @@ t_head_arg	*initialise_head(void)
 	head->co = 0;
 	head->nb_lines = 0;
 	head->nb_col = 0;
+	head->print = 0;
 	return (head);
 }
 

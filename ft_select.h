@@ -34,6 +34,7 @@ typedef struct		s_head_arg
 	unsigned short	co;
 	int				nb_lines;
 	int				nb_col;
+	short	int		print;
 }					t_head_arg;
 
 typedef struct		s_arg

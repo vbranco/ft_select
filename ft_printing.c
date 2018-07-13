@@ -61,10 +61,13 @@ void		ft_print_out(t_head_arg *head)
 	while (tmp)
 	{
 		if (tmp->flag)
+		{
 			write(1, tmp->info, ft_strlen(tmp->info));
+			if (tmp->next->flag)
+				write(1, " ", 1);
+		}
 		if (!tmp->next)
 			break ;
-		write(1, " ", 1);
 		tmp = tmp->next;
 	}
 }
