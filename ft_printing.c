@@ -53,18 +53,43 @@ void		ft_print_args(t_head_arg *head)
 	}
 }
 
+static int	ft_calculate_spaces(t_head_arg *head)
+{
+	t_arg	*tmp;
+	int		spaces;
+
+	spaces = 0;
+	tmp = head->start;
+	while (tmp)
+	{
+		if (tmp->flag)
+			spaces++;
+		if (!tmp->next)
+			break ;
+		tmp = tmp->next;
+	}
+	return (spaces);
+}
+
 void		ft_print_out(t_head_arg *head)
 {
 	t_arg	*tmp;
+	int		spaces;
 
 	tmp = head->start;
+	spaces = ft_calculate_spaces(head);
+	if (spaces > 0)
+		spaces--;
 	while (tmp)
 	{
 		if (tmp->flag)
 		{
 			write(1, tmp->info, ft_strlen(tmp->info));
-			if (tmp->next->flag)
+			if (spaces)
+			{
 				write(1, " ", 1);
+				spaces--;
+			}
 		}
 		if (!tmp->next)
 			break ;
