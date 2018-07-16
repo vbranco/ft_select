@@ -6,7 +6,7 @@
 /*   By: vbranco <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/05/31 16:30:33 by vbranco      #+#   ##    ##    #+#       */
-/*   Updated: 2018/05/31 16:30:35 by vbranco     ###    #+. /#+    ###.fr     */
+/*   Updated: 2018/07/16 15:24:08 by vbranco     ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -27,7 +27,7 @@ void		ft_free_2char(char ***s)
 			free(tmp[i]);
 			i++;
 		}
-		free(tmp); //ceci cree des erreurs avec valgrind
+		free(tmp);
 	}
 	*s = NULL;
 }

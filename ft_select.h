@@ -1,13 +1,26 @@
+/* ************************************************************************** */
+/*                                                          LE - /            */
+/*                                                              /             */
+/*   ft_select.h                                      .::    .:/ .      .::   */
+/*                                                 +:+:+   +:    +:  +:+:+    */
+/*   By: vbranco <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
+/*                                                 #+#   #+    #+    #+#      */
+/*   Created: 2018/07/16 15:21:51 by vbranco      #+#   ##    ##    #+#       */
+/*   Updated: 2018/07/16 15:56:15 by vbranco     ###    #+. /#+    ###.fr     */
+/*                                                         /                  */
+/*                                                        /                   */
+/* ************************************************************************** */
+
 #ifndef FT_SELECT_H
 # define FT_SELECT_H
 
-#include "libft/libft.h"
-#include <term.h>
-#include <termios.h>
-#include <curses.h>
-#include <fcntl.h>
-#include <sys/ioctl.h>
-#include <signal.h>
+# include "libft/libft.h"
+# include <term.h>
+# include <termios.h>
+# include <curses.h>
+# include <fcntl.h>
+# include <sys/ioctl.h>
+# include <signal.h>
 
 # define TBLACK		"\e[30m"
 # define TBLUE		"\e[34m"
@@ -22,7 +35,6 @@
 # define BRED		"\e[41m"
 # define BGREEN		"\e[42m"
 # define TSTOP		"\e[0m"
-
 
 typedef struct		s_head_arg
 {
@@ -46,59 +58,56 @@ typedef struct		s_arg
 	struct s_arg	*prev;
 }					t_arg;
 
-t_head_arg			*head;
+t_head_arg			*g_head;
 
 /*
 **	FT_TOOLS_LST.c
 */
 t_head_arg			*initialise_head(void);
 t_arg				*initialise_arg(char *inf);
-void				add_arg(t_head_arg *head, char *info);
-void				remove_arg(t_head_arg *head, char *inf);
-void				ft_dell_args(t_head_arg **head);
+void				add_arg(t_head_arg *g_head, char *info);
+void				remove_arg(t_head_arg *g_head, char *inf);
+void				ft_dell_args(t_head_arg **g_head);
 
 /*
 **	FT_MOVE_AND_DELL.c
 */
-void				ft_deplace_cursor(t_head_arg *head, char *buf);
-void				ft_deplace(t_head_arg *head, char dire);
-int					ft_dell_arg(t_head_arg *head);
+void				ft_deplace_cursor(t_head_arg *g_head, char *buf);
+void				ft_deplace(t_head_arg *g_head, char dire);
+int					ft_dell_arg(t_head_arg *g_head);
 
 /*
 **	MAIN.c
 */
-void				ft_display_size(int sig);
-void				ft_verif_signal_1(void);
-void				ft_verif_signal_2(void);
-
+int					my_putchar(int c);
 
 /*
 **	FT_GET_INPUT.c
 */
-void				ft_select_arg(t_head_arg *head);
-t_arg				*ft_looking_for_position(t_head_arg *head);
-void				ft_get_input(t_head_arg *head);
-void				ft_get_args(t_head_arg *head, int ac, char **av);
+void				ft_select_arg(t_head_arg *g_head);
+t_arg				*ft_looking_for_position(t_head_arg *g_head);
+void				ft_get_input(t_head_arg *g_head);
+void				ft_get_args(t_head_arg *g_head, int ac, char **av);
 
 /*
 **	FT_PRINTING.c
 */
-void				ft_print_args(t_head_arg *head);
-int					my_putchar(int c);
-void				ft_print_out(t_head_arg *head);
+void				ft_print_args(t_head_arg *g_head);
+void				ft_print_out(t_head_arg *g_head);
 
 /*
 **	FT_CALCULATE_FOR_PRINT.c
 */
-int					ft_calculate_size(t_head_arg *head);
-void				ft_calculate_place_print(t_head_arg *head, int *x, int *y);
+int					ft_calculate_size(t_head_arg *g_head);
+void				ft_calculate_place_print(t_head_arg *g_head, int *x,
+		int *y);
 void				ft_display_size(int sig);
 
 /*
 ** FT_TERM.c
 */
-int					ft_prepare_term(t_head_arg *head, int i);
-void				ft_config_term(t_head_arg *head, int start);
+int					ft_prepare_term(t_head_arg *g_head, int i);
+void				ft_config_term(t_head_arg *g_head, int start);
 int					ft_init_term(void);
 
 /*

@@ -1,3 +1,16 @@
+/* ************************************************************************** */
+/*                                                          LE - /            */
+/*                                                              /             */
+/*   ft_signal.c                                      .::    .:/ .      .::   */
+/*                                                 +:+:+   +:    +:  +:+:+    */
+/*   By: vbranco <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
+/*                                                 #+#   #+    #+    #+#      */
+/*   Created: 2018/07/16 15:21:55 by vbranco      #+#   ##    ##    #+#       */
+/*   Updated: 2018/07/16 15:50:48 by vbranco     ###    #+. /#+    ###.fr     */
+/*                                                         /                  */
+/*                                                        /                   */
+/* ************************************************************************** */
+
 #include "ft_select.h"
 
 void		ft_verif_signal_1(void)
@@ -42,8 +55,8 @@ void		ft_verif_signal_2(void)
 void		ft_stop(int sig)
 {
 	ft_background(sig);
-	close(head->fd);
-	ft_dell_args(&head);
+	close(g_head->fd);
+	ft_dell_args(&g_head);
 	exit(EXIT_SUCCESS);
 }
 
@@ -51,13 +64,13 @@ void		ft_frontground(int sig)
 {
 	ft_verif_signal_1();
 	ft_verif_signal_2();
-	ft_config_term(head, 1);
+	ft_config_term(g_head, 1);
 	ft_display_size(0);
 }
 
 void		ft_background(int sig)
 {
-	ft_config_term(head, 0);
+	ft_config_term(g_head, 0);
 	if (sig == SIGTSTP)
 	{
 		signal(SIGTSTP, SIG_DFL);

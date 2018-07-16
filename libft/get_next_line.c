@@ -6,14 +6,14 @@
 /*   By: vbranco <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/05/31 15:45:41 by vbranco      #+#   ##    ##    #+#       */
-/*   Updated: 2018/05/31 15:45:58 by vbranco     ###    #+. /#+    ###.fr     */
+/*   Updated: 2018/07/16 15:21:01 by vbranco     ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-static int				getch(t_list *cur)
+static int			getch(t_list *cur)
 {
 	if (((t_getch*)(cur->content))->n == 0)
 	{
@@ -27,7 +27,7 @@ static int				getch(t_list *cur)
 			(unsigned char)*((t_getch*)cur->content)->bufp++ : EOF);
 }
 
-static t_getch				*set_getch(const int fd)
+static t_getch		*set_getch(const int fd)
 {
 	t_getch	*getch;
 
@@ -39,7 +39,7 @@ static t_getch				*set_getch(const int fd)
 	return (getch);
 }
 
-static t_list				*tog_lst(t_list **lst, const int fd)
+static t_list		*tog_lst(t_list **lst, const int fd)
 {
 	t_list	*cur;
 	t_getch *track;

@@ -6,7 +6,7 @@
 #    By: vbranco <marvin@le-101.fr>                 +:+   +:    +:    +:+      #
 #                                                  #+#   #+    #+    #+#       #
 #    Created: 2018/03/07 17:08:49 by vbranco      #+#   ##    ##    #+#        #
-#    Updated: 2018/06/27 19:40:15 by vbranco     ###    #+. /#+    ###.fr      #
+#    Updated: 2018/07/16 15:32:59 by vbranco     ###    #+. /#+    ###.fr      #
 #                                                          /                   #
 #                                                         /                    #
 # **************************************************************************** #
@@ -15,10 +15,8 @@ NAME		=	ft_select
 
 HEADER		=	ft_select.h
 
-FILENAMES	=	main.c ft_move_and_dell.c ft_tools_lst.c ft_get_input.c ft_printing.c ft_term.c \
-ft_calculate_for_print.c \
-ft_signal.c
-
+FILENAMES	=	main.c ft_move_and_dell.c ft_tools_lst.c ft_get_input.c \
+				ft_printing.c ft_term.c ft_calculate_for_print.c ft_signal.c
 
 SOURCES		=	$(addprefix ./, $(FILENAMES))
 

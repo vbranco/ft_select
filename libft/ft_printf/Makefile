@@ -1,3 +1,16 @@
+# **************************************************************************** #
+#                                                           LE - /             #
+#                                                               /              #
+#    Makefile                                         .::    .:/ .      .::    #
+#                                                  +:+:+   +:    +:  +:+:+     #
+#    By: vbranco <marvin@le-101.fr>                 +:+   +:    +:    +:+      #
+#                                                  #+#   #+    #+    #+#       #
+#    Created: 2018/07/16 15:19:59 by vbranco      #+#   ##    ##    #+#        #
+#    Updated: 2018/07/16 15:20:01 by vbranco     ###    #+. /#+    ###.fr      #
+#                                                          /                   #
+#                                                         /                    #
+# **************************************************************************** #
+
 NAME = libftprintf.a
 
 FLAGS = -Wall -Werror -Wextra
@@ -12,9 +25,6 @@ FILES = ft_arg_c.c ft_arg_d_i.c ft_arg_p.c ft_arg_s.c ft_arg_x_o.c \
 	ft_size_nb2.c ft_add_str_begin.c ft_p_min.c\
 	ft_add_str_end.c ft_buffer_d_i.c ft_arg_b.c ft_buffer_x_o.c ft_buffer_b.c\
 	ft_buffer_s.c ft_buffer_c.c ft_d_neg.c ft_d_prec.c ft_zero.c ft_x_prec.c
-
-
-#SOURCES = $(addprefix ./, $(FILES))
 
 OBJ = $(addprefix ./build/, $(FILES:.c=.o))
 

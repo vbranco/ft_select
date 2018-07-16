@@ -1,39 +1,52 @@
+/* ************************************************************************** */
+/*                                                          LE - /            */
+/*                                                              /             */
+/*   ft_calculate_for_print.c                         .::    .:/ .      .::   */
+/*                                                 +:+:+   +:    +:  +:+:+    */
+/*   By: vbranco <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
+/*                                                 #+#   #+    #+    #+#      */
+/*   Created: 2018/07/16 15:21:39 by vbranco      #+#   ##    ##    #+#       */
+/*   Updated: 2018/07/16 15:46:48 by vbranco     ###    #+. /#+    ###.fr     */
+/*                                                         /                  */
+/*                                                        /                   */
+/* ************************************************************************** */
+
 #include "ft_select.h"
 
-static void	ft_calculate_col_max(t_head_arg *head)
+static void	ft_calculate_col_max(t_head_arg *g_head)
 {
 	t_arg	*tmp;
 
-	tmp = head->start;
+	tmp = g_head->start;
 	while (tmp)
 	{
-		if ((int)ft_strlen(tmp->info) > head->nb_col)
-			head->nb_col = (int)ft_strlen(tmp->info);
+		if ((int)ft_strlen(tmp->info) > g_head->nb_col)
+			g_head->nb_col = (int)ft_strlen(tmp->info);
 		if (!tmp->next)
-			break;
+			break ;
 		tmp = tmp->next;
 	}
 }
 
-static int	ft_calculate_total_len(t_head_arg *head)
+static int	ft_calculate_total_len(t_head_arg *g_head)
 {
 	t_arg	*tmp;
 	int		total_len;
 
 	total_len = 0;
-	tmp = head->start;
+	tmp = g_head->start;
 	while (tmp)
 	{
-		total_len += head->nb_col;
+		total_len += g_head->nb_col;
 		if (!tmp->next)
-			break;
+			break ;
 		total_len += 1;
 		tmp = tmp->next;
 	}
 	return (total_len);
 }
 
-int			ft_calculate_size(t_head_arg *head)
+int			ft_calculate_size(t_head_arg *g_head)
 {
 	t_arg	*tmp;
 	int		len_args;
@@ -43,32 +56,32 @@ int			ft_calculate_size(t_head_arg *head)
 
 	len_args = 0;
 	line = 1;
-	tmp = head->start;
-	ft_calculate_col_max(head);
-	if (head->nb_col > head->co)
-		return (write(head->fd, "Screen size too small", 21));
-	len_args = ft_calculate_total_len(head);
-	nb_max_col = len_args / head->nb_col;
+	tmp = g_head->start;
+	ft_calculate_col_max(g_head);
+	if (g_head->nb_col > g_head->co)
+		return (write(g_head->fd, "Screen size too small", 21));
+	len_args = ft_calculate_total_len(g_head);
+	nb_max_col = len_args / g_head->nb_col;
 	nb_args = nb_max_col;
-	while (len_args > head->co)
+	while (len_args > g_head->co)
 	{
 		line++;
-		nb_max_col = ((nb_args - 1) / line ) + 1;
-		len_args = (head->nb_col * nb_max_col) + (nb_max_col - 1);
+		nb_max_col = ((nb_args - 1) / line) + 1;
+		len_args = (g_head->nb_col * nb_max_col) + (nb_max_col - 1);
 	}
-	head->nb_lines = line;
-	if (head->nb_lines > head->li)
-		return (write(head->fd, "Screen size too small", 21));
+	g_head->nb_lines = line;
+	if (g_head->nb_lines > g_head->li)
+		return (write(g_head->fd, "Screen size too small", 21));
 	return (0);
 }
 
-void		ft_calculate_place_print(t_head_arg *head, int *x, int *y)
+void		ft_calculate_place_print(t_head_arg *g_head, int *x, int *y)
 {
 	(*y)++;
-	if (*y == head->nb_lines)
+	if (*y == g_head->nb_lines)
 	{
 		*y = 0;
-		(*x) += head->nb_col + 1;
+		(*x) += g_head->nb_col + 1;
 	}
 }
 
@@ -78,10 +91,9 @@ void		ft_display_size(int sig)
 
 	(void)sig;
 	ioctl(0, TIOCGWINSZ, &wind);
-	head->li = wind.ws_row;
-	head->co = wind.ws_col;
-	write(head->fd, tgetstr("cl", NULL), ft_strlen(tgetstr("cl", NULL)));
+	g_head->li = wind.ws_row;
+	g_head->co = wind.ws_col;
+	write(g_head->fd, tgetstr("cl", NULL), ft_strlen(tgetstr("cl", NULL)));
 	tputs(tgoto(tgetstr("cm", NULL), 0, 0), 1, my_putchar);
-	ft_print_args(head);
+	ft_print_args(g_head);
 }
-
