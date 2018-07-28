@@ -6,7 +6,7 @@
 #    By: vbranco <marvin@le-101.fr>                 +:+   +:    +:    +:+      #
 #                                                  #+#   #+    #+    #+#       #
 #    Created: 2018/03/07 17:08:49 by vbranco      #+#   ##    ##    #+#        #
-#    Updated: 2018/07/16 15:32:59 by vbranco     ###    #+. /#+    ###.fr      #
+#    Updated: 2018/07/28 17:02:45 by vbranco     ###    #+. /#+    ###.fr      #
 #                                                          /                   #
 #                                                         /                    #
 # **************************************************************************** #
@@ -57,7 +57,7 @@ build:
 
 $(NAME): $(OBJECTS)
 		@$(MAKE) -C $(L_FT)
-		@gcc $(FLAGS) -I  $(HEADER) $(SOURCES) $(LIB) -lncurses -o $@
+		@gcc $(FLAGS) -I  $(HEADER) $(SOURCES) $(LIB) -ltermcap -o $@
 		@echo " Ready to play"
 
 build/%.o: ./%.c | build
